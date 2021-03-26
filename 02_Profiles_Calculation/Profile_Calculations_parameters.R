@@ -17,8 +17,8 @@ cat("\014")     # Clear console
 mX <- "m6"
 
 ## Recalculate?
-recalculate = F
-testrun = F
+recalculate = T
+testrun = T
 save_results = F
 ## Custom quantile range start (All, top 95% and top 99% are always included)
 custom_quantile_start = 50
@@ -62,6 +62,11 @@ source("./profiles_functions/ewmaweights.R")
 source("./profiles_functions/Segmentation_Profile.R")
 source("./profiles_functions/hybrid_profile_new.R")
 
+source("./profiles_functions/Fourierlog_Profile.R")
+source("./profiles_functions/STLlog_Profile.R")
+source("./profiles_functions/Hybridlog_Profile.R")
+
+
 
 ## LIBRARIES
 library(ggplot2)
@@ -76,7 +81,7 @@ methods_parameters = get_methods_parameters()
 if (testrun) {
   methods_parameters = methods_parameters[1]
   methods_parameters[[1]] = methods_parameters[[1]][2]
-  links = links_list[1]
+  link = links_list[1]
   method = "threshold"
   spike_parameter = methods_parameters[[1]][[1]]
   #links_list = links_list[1:3]
@@ -133,6 +138,14 @@ if (recalculate == TRUE) {
         hybrid_results = calculate_profile(profile_algorithm = "hybrid", profile_storage = hybrid_results)
         # Naive Segmentation profile
         segmentation_results = calculate_profile(profile_algorithm = "segmentation", profile_storage = segmentation_results)
+        # Fourierlog 
+        #fourierlog_results = calculate_profile(profile_algorithm = "fourier", profile_storage = fourierlog_results)
+        # Stllog
+        stllog_results = calculate_profile(profile_algorithm = "stllog", profile_storage = stllog_results)
+        # Hybrid log
+        hybridlog_results = calculate_profile(profile_algorithm = "hybridlog", profile_storage = hybridlog_results)
+        # SARIMA
+        sarima_results = calculate_profile(profile_algorithm = "sarima", profile_storage = sarima_results)
 
         #rm(link_data)
       }
@@ -149,6 +162,7 @@ if (recalculate == TRUE) {
       stl_results = errors_across_links(profile_storage = stl_results, method = method, spike_parameter = spike_parameter)
       hybrid_results = errors_across_links(profile_storage = hybrid_results, method = method, spike_parameter = spike_parameter)
       segmentation_results = errors_across_links(profile_storage = segmentation_results, method = method, spike_parameter = spike_parameter)
+      hybridlog_results = errors_across_links(profile_storage = hybridlog_results, method = method, spike_parameter = spike_parameter)
     }
   }
   

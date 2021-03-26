@@ -41,6 +41,14 @@ calculate_profile = function(profile_algorithm, profile_storage){
     profile_storage[[method]][[spike_parameter]]$profile[link_index,] = segmentation_profile(weight_type = "uniform")
   } else if (profile_algorithm == "hybrid_new") {
     profile_storage[[method]][[spike_parameter]]$profile[link_index,] = hybrid_profile_new(automatic_settings_spike = T, automatic_nl_nt = T)
+  } else if (profile_algorithm == "fourierlog") {
+    profile_storage[[method]][[spike_parameter]]$profile[link_index, ] = fourierlog_profile()
+  } else if (profile_algorithm == "stllog") {
+    profile_storage[[method]][[spike_parameter]]$profile[link_index,] = stllog_profile(use_background_and_spikes = T, automatic_settings_day = F, automatic_settings_week = F, automatic_settings_spike = T,
+                                                                                    automatic_nl_nt = T, compute_average_seasonality = T, compute_linear_trend = T)
+  } else if (profile_algorithm == "hybridlog") {
+    # Requires STL and Hybrid to run first
+    profile_storage[[method]][[spike_parameter]]$profile[link_index,] = hybridlog_profile()
   }
   ##########################################
   ## --- END PROFILE SPECIFIC SECTION --- ##

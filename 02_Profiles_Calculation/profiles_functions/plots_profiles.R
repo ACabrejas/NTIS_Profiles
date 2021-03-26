@@ -17,6 +17,8 @@ relative_error_daytime_singlelink = function(error_type, link_number, method, sp
                            Fourier = fourier_results[[method]][[spike_parameter]]$day_time_error_matrices$day_time_error_matrix[link_number,],
                            Hybrid = hybrid_results[[method]][[spike_parameter]]$day_time_error_matrices$day_time_error_matrix[link_number,],
                            Segmentation = segmentation_results[[method]][[spike_parameter]]$day_time_error_matrices$day_time_error_matrix[link_number,],
+                           STL_LOG = stllog_results[[method]][[spike_parameter]]$day_time_error_matrices$day_time_error_matrix[link_number,],
+                           Fourier_LOG = fourierlog_results[[method]][[spike_parameter]]$day_time_error_matrices$day_time_error_matrix[link_number,],
                            time)
     } else if (error_type == "Negative") {
       plot_data = data.frame(Published = thales_results[[method]][[spike_parameter]]$day_time_error_matrices$day_time_error_neg_matrix[link_number,],
@@ -67,11 +69,12 @@ relative_error_daytime = function(error_type, method, spike_parameter) {
   # Create dataframe to plot depending on the needed data
   if (error_type == "Relative") {
     plot_data = data.frame(Published = thales_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
-                           Null = null_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
-                           STL = stl_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
-                           Fourier = fourier_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
+                           #Null = null_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
+                           #STL = stl_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
+                           #Fourier = fourier_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
                            Hybrid = hybrid_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
                            Segmentation =  segmentation_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
+                           HybridLog = hybridlog_results[[method]][[spike_parameter]]$daytime_errors$day_time_error,
                            time)
   } else if (error_type == "Negative") {
     plot_data = data.frame(Published = thales_results[[method]][[spike_parameter]]$daytime_errors$day_time_error_neg,
@@ -97,7 +100,7 @@ relative_error_daytime = function(error_type, method, spike_parameter) {
   
   # Plot
   ggplot(data = plot_data_long, aes(x=time, y=value, colour=variable, group = variable)) + 
-    ylab(paste(error_type,"Error", sep = " ")) + 
+    ylab(paste("Mean Absolute Relative Error", sep = " ")) + 
     xlab("Time of the day") +
     #theme(axis.title.x = element_blank()) + 
     geom_line(size=1.5) + theme(text = element_text(size=28),axis.text.x = element_text(angle = 0)) + 
@@ -343,11 +346,12 @@ quantile_error = function(quantile, error_type, method, spike_parameter) {
   if (quantile == 1) {
     if (error_type == "ab") {
       plot_data = data.frame(Published = thales_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
-                             Null = null_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
-                             STL = stl_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
-                             Fourier = fourier_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
+                             #Null = null_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
+                             #STL = stl_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
+                             #Fourier = fourier_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
                              Hybrid = hybrid_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
                              Segmentation = segmentation_results[[method]][[spike_parameter]]$quantile_errors_avg$ab_error_avg,
+                             HybridLog = hybridlog_results[[method]][[spike_parameter]]$quantile_errors_avg$rms_error_avg,
                              false_x_axis)
     } else if (error_type == "rms") {
       plot_data = data.frame(Published = thales_results[[method]][[spike_parameter]]$quantile_errors_avg$rms_error_avg,
@@ -356,6 +360,7 @@ quantile_error = function(quantile, error_type, method, spike_parameter) {
                              Fourier = fourier_results[[method]][[spike_parameter]]$quantile_errors_avg$rms_error_avg,
                              Hybrid = hybrid_results[[method]][[spike_parameter]]$quantile_errors_avg$rms_error_avg,
                              Segmentation = segmentation_results[[method]][[spike_parameter]]$quantile_errors_avg$rms_error_avg,
+                             HybridLog = hybridlog_results[[method]][[spike_parameter]]$quantile_errors_avg$rms_error_avg,
                              false_x_axis)
     } else {
       # Error message missing method
@@ -446,28 +451,28 @@ quantile_error = function(quantile, error_type, method, spike_parameter) {
   }
 
   # Plot
-  ggplot(data = plot_data_long, aes(x=false_x_axis, y=value, colour=variable, group = variable)) + 
-    ylab("Relative Error") + 
-    #xlab("Percentile of travel times") +
-    geom_line(size=1.5) + theme(text = element_text(size=24),axis.text.x = element_text(hjust = 1)) + 
-     labs(x="Percentile of Travel Time")+
-    scale_x_continuous(breaks=c(1,seq(from = 10, to= 100, length.out = 10)), labels=custom_ticks) +
-    coord_cartesian(xlim = c(0, 100), ylim = c(0,0.5)) +
-    scale_colour_discrete(name  =label_mx, breaks=c("Published", "Null", "STL", "Fourier", "Hybrid"),
-                          labels=c("Published Model", "Null Model", "STL Model", "Fourier Model", "Hybrid Model")) +
-    theme(text = element_text(size=18),legend.position = c(0.14, 0.90)) 
-    #ggtitle(paste("Average AB/RMS error for all links across percentiles of travel time", sep = " "))
+#  ggplot(data = plot_data_long, aes(x=false_x_axis, y=value, colour=variable, group = variable)) + 
+#    ylab("Relative Error") + 
+#    #xlab("Percentile of travel times") +
+#    geom_line(size=1.5) + theme(text = element_text(size=24),axis.text.x = element_text(hjust = 1)) + 
+#     labs(x="Percentile of Travel Time")+
+#    scale_x_continuous(breaks=c(1,seq(from = 10, to= 100, length.out = 10)), labels=custom_ticks) +
+#    coord_cartesian(xlim = c(0, 100), ylim = c(0,0.5)) +
+#    scale_colour_discrete(name  =label_mx, breaks=c("Published", "Null", "STL", "Fourier", "Hybrid"),
+#                          labels=c("Published Model", "Null Model", "STL Model", "Fourier Model", "Hybrid Model")) +
+#    theme(text = element_text(size=18),legend.position = c(0.14, 0.90)) 
+#    ggtitle(paste("Average AB/RMS error for all links across percentiles of travel time", sep = " "))
   
   ggplot(data = plot_data_long, aes(x=false_x_axis, y=value, colour=variable, group = variable)) + 
-    ylab("Relative Error") + 
+    ylab("Mean Average Relative Error") + 
     labs(x="Percentile of Travel Time")+
     #theme(axis.title.x = element_blank()) + 
     geom_line(size=1.5) + theme(text = element_text(size=24),axis.text.x = element_text(angle = 0)) + 
     scale_x_continuous(breaks=c(1,seq(from = 10, to= 100, length.out = 10)), labels=custom_ticks) +
-    scale_colour_discrete(name  =label_mx)+
+    scale_colour_discrete(name  =label_mx) + 
     #breaks=c("Published", "Null", "STL", "Fourier", "Hybrid"),
     #                      labels=c("Published Model", "Null Model", "STL Model", "Fourier Model", "Hybrid Model"))  +
-    theme(legend.position = c(0.14, 0.90)) + theme(legend.text=element_text(size=18)) 
+    theme(legend.position = c(0.1, 0.85)) + theme(legend.text=element_text(size=18)) 
 
   
   

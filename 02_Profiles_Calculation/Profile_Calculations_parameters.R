@@ -87,7 +87,6 @@ if (testrun) {
   #links_list = links_list[1:3]
 }
 
-
 # Calculate number of used parameters
 num_param = 0
 for (i in 1:(length(names(methods_parameters)))) {
@@ -139,7 +138,7 @@ if (recalculate == TRUE) {
         # Naive Segmentation profile
         segmentation_results = calculate_profile(profile_algorithm = "segmentation", profile_storage = segmentation_results)
         # Fourierlog 
-        #fourierlog_results = calculate_profile(profile_algorithm = "fourier", profile_storage = fourierlog_results)
+        fourierlog_results = calculate_profile(profile_algorithm = "fourier", profile_storage = fourierlog_results)
         # Stllog
         stllog_results = calculate_profile(profile_algorithm = "stllog", profile_storage = stllog_results)
         # Hybrid log

@@ -1,7 +1,7 @@
 fourierlog_profile = function() {
   ## --- FOURIER PROFILE ---
   # Parameters
-  cut_freq = log(0.0041) ## Low-pass filter cut-off frequency, frequency for period = 4 hours (0.0041 = 1/(4*60))
+  cut_freq = 0.0041 ## Low-pass filter cut-off frequency, frequency for period = 4 hours (0.0041 = 1/(4*60))
   alpha = 0.3
   
   ## Set FFT time and frequency axes

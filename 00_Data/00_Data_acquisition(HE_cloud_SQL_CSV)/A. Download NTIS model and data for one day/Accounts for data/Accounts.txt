@@ -1,0 +1,19 @@
+Gmail
+Username: thales.mathsys@gmail.com
+Password: W4rw1ckC0mpl3xity
+
+Traffic England
+Username: colmc2
+Password: 6zwnSa4B
+
+DATABASE
+IP: mathsys-thales.csvcspmrq7mh.eu-west-1.rds.amazonaws.com
+Port: 3306
+Users: peter, laura, guillem, alvaro
+Default Password: 1234567890
+To log in:
+1. Install MySQL
+2. Open Terminal
+3. Type: mysql -u <username> -p -h mathsys-thales.csvcspmrq7mh.eu-west-1.rds.amazonaws.com
+4. Congragulations your are in!
+5. To exit type: quit;

@@ -7,7 +7,7 @@ library(smooth)
 
 tt = link_data$travel_time
 
-training_length = 4
+training_length = 2
 pred_length = 1
 
 tt_sel = tt[1:(training_length*10080)]
@@ -94,3 +94,11 @@ ines(tt_true,col="red")
 
 mape = abs(tt_true-tt_est)/tt_true
 plot(mape,type = 'l')
+
+#######################################
+#  SMALL SCALE
+######################
+plot(tt_sel[1:1440], type = 'l')
+tt_min  = tt_sel[400:800]
+
+arima0 = msarima(tt_min, orders = c(0,0,0),holdout = )
